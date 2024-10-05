@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,9 +30,10 @@ namespace Open_Closed
             this.size = size;
         }
     }
+    #region 錯誤寫法
     public class ProductFilter
     {
-        public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
+        public IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
         {
             foreach (Product product in products)
             {
@@ -39,5 +41,59 @@ namespace Open_Closed
                     yield return product;
             }
         }
+        public IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
+        {
+            foreach (Product product in products)
+            {
+                if (product.Color == color)
+                    yield return product;
+            }
+        }
     }
+    #endregion
+
+    #region 正確寫法:使用specification pattern
+    public interface ISpecification<T>
+    {
+        bool IsSatisfied(T t);
+    }
+    public interface IFilter<T>
+    {
+        IEnumerable<T> Filter(IEnumerable<T> items, ISpecification<T> spec);
+    }
+    public class ColorSpecification : ISpecification<Product>
+    {
+        private Color _color;
+        public ColorSpecification(Color color)
+        {
+            this._color = color;
+        }
+        public bool IsSatisfied(Product t)
+        {
+            return _color == t.Color;
+        }
+    }
+    public class SizeSpecification : ISpecification<Product>
+    {
+        private Size _size;
+        public SizeSpecification(Size size)
+        {
+            this._size = size;
+        }
+        public bool IsSatisfied(Product t)
+        {
+            return this._size == t.Size;
+        }
+    }
+    public class Open_Closed_Filter : IFilter<Product>
+    {
+        public IEnumerable<Product> Filter(IEnumerable<Product> items, ISpecification<Product> spec)
+        {
+            foreach (Product item in items)
+            {
+                if (spec.IsSatisfied(item)) yield return item;
+            }
+        }
+    }
+    #endregion
 }

@@ -4,6 +4,7 @@ using System.IO;
 
 namespace Single_Responsibility
 {
+    #region CRUD
     public class Journal
     {
         private List<string> entries = new List<string>();
@@ -24,6 +25,9 @@ namespace Single_Responsibility
             return string.Join(Environment.NewLine, entries);
         }
     }
+    #endregion
+
+    #region 檔案I/O
     public class Presistence
     {
         public static void SaveToFile(Journal journal, string fileName, bool overwrite = false)
@@ -43,4 +47,5 @@ namespace Single_Responsibility
             return journal;
         }
     }
+    #endregion
 }

@@ -14,15 +14,26 @@ public class Program
 
     private static void Open_Closed_Demo()
     {
-        Product car = new Product("Car", Color.Red, Size.Large);
+        Product car = new Product("Car", Color.Green, Size.Large);
         Product book = new Product("Book", Color.Green, Size.Medium);
         Product clock = new Product("Clock", Color.Blue, Size.Small);
         Product pencil = new Product("Pencil", Color.Black, Size.Small);
         Product[] products = new Product[] { car, book, clock, pencil };
-        foreach (Product p in ProductFilter.FilterBySize(products, Size.Small))
+
+        Console.WriteLine("Product Filter (old):");
+        ProductFilter ProdFilter = new ProductFilter();
+        foreach (Product p in ProdFilter.FilterBySize(products, Size.Small))
         {
-            Console.WriteLine($"{p.Name} is medium.");
+            Console.WriteLine($" - {p.Name} is medium.");
         }
+
+        Console.WriteLine("Open_Closed Filter (new):");
+        Open_Closed_Filter OCFilter = new Open_Closed_Filter();
+        foreach (Product product in OCFilter.Filter(products, new ColorSpecification(Color.Green)))
+        {
+            Console.WriteLine($" - {product.Name} is Green.");
+        };
+
         Console.ReadLine();
     }
 
