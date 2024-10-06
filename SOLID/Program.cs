@@ -17,14 +17,14 @@ public class Program
         Product car = new Product("Car", Color.Green, Size.Large);
         Product book = new Product("Book", Color.Green, Size.Medium);
         Product clock = new Product("Clock", Color.Blue, Size.Small);
-        Product pencil = new Product("Pencil", Color.Black, Size.Small);
+        Product pencil = new Product("Pencil", Color.Green, Size.Small);
         Product[] products = new Product[] { car, book, clock, pencil };
 
         Console.WriteLine("Product Filter (old):");
         ProductFilter ProdFilter = new ProductFilter();
         foreach (Product p in ProdFilter.FilterBySize(products, Size.Small))
         {
-            Console.WriteLine($" - {p.Name} is medium.");
+            Console.WriteLine($" - {p.Name} is small.");
         }
 
         Console.WriteLine("Open_Closed Filter (new):");
@@ -33,7 +33,11 @@ public class Program
         {
             Console.WriteLine($" - {product.Name} is Green.");
         };
-
+        foreach (Product product in OCFilter.Filter(products,
+            new AndSpecification<Product>(new SizeSpecification(Size.Small), new ColorSpecification(Color.Green))))
+        {
+            Console.WriteLine($" - {product.Name} is Green and small.");
+        };
         Console.ReadLine();
     }
 
