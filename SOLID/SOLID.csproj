@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Liskov_Substitution.cs" />
     <Compile Include="Open_Closed.cs" />
     <Compile Include="Single_Responsibility.cs" />
     <Compile Include="Program.cs" />
