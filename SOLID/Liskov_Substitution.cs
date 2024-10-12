@@ -13,8 +13,8 @@ namespace Liskov_Substitution
     public class Rectangle : IShape
     {
         private int _width, _height;
-        public int Width { get { return _width; } set { _width = value; } }
-        public int Height { get { return _height; } set { _height = value; } }
+        public virtual int Width { get { return _width; } set { _width = value; } }
+        public virtual int Height { get { return _height; } set { _height = value; } }
         public Rectangle()
         {
         }
@@ -36,6 +36,17 @@ namespace Liskov_Substitution
             set { base.Width = base.Height = value; }
         }
         public new int Height
+        {
+            set { base.Width = base.Height = value; }
+        }
+    }
+    public class BetterSquare : Rectangle
+    {
+        public override int Width
+        {
+            set { base.Width = base.Height = value; }
+        }
+        public override int Height
         {
             set { base.Width = base.Height = value; }
         }

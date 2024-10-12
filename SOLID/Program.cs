@@ -4,6 +4,8 @@ using Liskov_Substitution;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Dependency_Inversion;
+using System.Linq;
 
 public class Program
 {
@@ -11,16 +13,46 @@ public class Program
     {
         //Single_Responsibility_Demo();
         //Open_Closed_Demo();
-        Liskov_Substitution_Demo();
+        //Liskov_Substitution_Demo();
+        Dependency_Inversion_Demo();
+    }
+
+    private static void Dependency_Inversion_Demo()
+    {
+        Person parent = new Person { Name = "John" };
+        Person child1 = new Person { Name = "Mike" };
+        Person child2 = new Person { Name = "Mary" };
+
+        BadRelationships badRelationship = new BadRelationships();
+        badRelationship.AddParentAndChild(parent, child1);
+        badRelationship.AddParentAndChild(parent, child2);
+        //依賴原始資料格式，不易改動
+        foreach (var p in badRelationship.Relations.Where(x => x.Item1.Name == "John" && x.Item2 == RelationType.Parent))
+        {
+            Console.WriteLine($"John has a child called {p.Item3.Name}.");
+        }
+
+        GoodRelationships goodRelationship = new GoodRelationships();
+        goodRelationship.AddParentAndChild(parent, child1);
+        goodRelationship.AddParentAndChild(parent, child2);
+        //呼叫方法，以降低依賴性
+        foreach (var p in goodRelationship.FindAllChildrenOf("John"))
+        {
+            Console.WriteLine($"John has a child called {p.Name}.");
+        };
+        Console.ReadLine();
     }
 
     private static void Liskov_Substitution_Demo()
     {
-        Rectangle rectangle = new Rectangle(10,5);
+        Rectangle rectangle = new Rectangle(10, 5);
         Console.WriteLine($"{rectangle}, Area: {rectangle.CalculateArea()}");
         Rectangle square = new Square();
         square.Width = 4;
         Console.WriteLine($"{square}, Area: {square.CalculateArea()}");
+        Rectangle betterSquare = new BetterSquare();
+        betterSquare.Width = 4;
+        Console.WriteLine($"{betterSquare}, Area: {betterSquare.CalculateArea()}");
         Console.ReadLine();
     }
 
